@@ -139,7 +139,15 @@ export default function App() {
   }, []);
 
   const handleResetClick = () => clearCanvas();
-  const handleDrawClick = () => clearCanvas(); // optional: start fresh
+  // Save canvas as image
+  const handleSaveClick = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'sketch.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
 
   return (
     <div className="page">
@@ -165,8 +173,8 @@ export default function App() {
           <button className="btn btn-secondary" onClick={handleResetClick}>
             Reset
           </button>
-          <button className="btn btn-primary" onClick={handleDrawClick}>
-            Draw
+          <button className="btn btn-primary" onClick={handleSaveClick}>
+            Save
           </button>
         </div>
       </div>
