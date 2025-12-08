@@ -4,11 +4,9 @@ canvas {
   image-rendering: pixelated; /* helps keep the chunky look when scaled */
 }
 
-
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-color: #0b5a5f;
 }
 
@@ -44,7 +42,7 @@ body {
 .screen {
   background-color: #d9d9d9;
   border-radius: 22px;
-  padding: 18px;
+  padding: 10px;
   border: 4px solid #333;
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
 }
@@ -71,6 +69,11 @@ canvas {
   background: #fdfdfd;
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.btn:hover {
+  box-shadow: none;
+  transform: translateY(1px);
 }
 
 .btn:active {

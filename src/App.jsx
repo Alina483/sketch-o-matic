@@ -10,6 +10,13 @@ const PEN_COLOR = "#222222";
 export default function App() {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  // Removed lastPos state (not needed for wrap logic)
+  // Mouse up handler for global event
+  const handleGlobalMouseUp = () => {
+    setIsDrawing(false);
+    window.removeEventListener("mousemove", handleGlobalMouseMove);
+    window.removeEventListener("mouseup", handleGlobalMouseUp);
+  };
 
   // helper: fill background
   const clearCanvas = () => {
@@ -25,40 +32,78 @@ export default function App() {
   };
 
   // draw one pixel cell at mouse/touch position
-  const drawPixelAtEvent = (evt) => {
+  // Draw at a given (x, y) in canvas coordinates, wrapping if needed
+  const drawPixelAt = (x, y) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-
-    const rect = canvas.getBoundingClientRect();
-
-    const clientX = "touches" in evt ? evt.touches[0].clientX : evt.clientX;
-    const clientY = "touches" in evt ? evt.touches[0].clientY : evt.clientY;
-
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-
-    // snap to grid
-    const px = Math.floor(x / PIXEL_SIZE) * PIXEL_SIZE;
-    const py = Math.floor(y / PIXEL_SIZE) * PIXEL_SIZE;
-
+    // Wrap coordinates
+    let px = ((Math.floor(x / PIXEL_SIZE) * PIXEL_SIZE) + CANVAS_WIDTH) % CANVAS_WIDTH;
+    let py = ((Math.floor(y / PIXEL_SIZE) * PIXEL_SIZE) + CANVAS_HEIGHT) % CANVAS_HEIGHT;
     ctx.fillStyle = PEN_COLOR;
     ctx.fillRect(px, py, PIXEL_SIZE, PIXEL_SIZE);
+  };
+
+  // For mouse/touch event, get canvas-relative coordinates
+  const getCanvasCoords = (evt) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const clientX = "touches" in evt ? evt.touches[0].clientX : evt.clientX;
+    const clientY = "touches" in evt ? evt.touches[0].clientY : evt.clientY;
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    };
+  };
+
+  // Draw at event position (mouse/touch)
+  const drawPixelAtEvent = (evt) => {
+    const { x, y } = getCanvasCoords(evt);
+    drawPixelAt(x, y);
   };
 
   // mouse handlers
   const handleMouseDown = (e) => {
     setIsDrawing(true);
     drawPixelAtEvent(e);
+    // Listen for mousemove/mouseup on window for wrap
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    window.addEventListener("mouseup", handleGlobalMouseUp);
   };
 
+  // Normal mouse move inside canvas
   const handleMouseMove = (e) => {
     if (!isDrawing) return;
     drawPixelAtEvent(e);
   };
 
-  const handleMouseUp = () => setIsDrawing(false);
-  const handleMouseLeave = () => setIsDrawing(false);
+  // Mouse move anywhere (for wrap)
+  const handleGlobalMouseMove = (e) => {
+    if (!isDrawing) return;
+    // If mouse is outside canvas, wrap
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    // If out of bounds, wrap
+    if (x < 0) x = CANVAS_WIDTH + x;
+    if (x >= CANVAS_WIDTH) x = x - CANVAS_WIDTH;
+    if (y < 0) y = CANVAS_HEIGHT + y;
+    if (y >= CANVAS_HEIGHT) y = y - CANVAS_HEIGHT;
+    drawPixelAt(x, y);
+  };
+
+  const handleMouseUp = () => {
+    setIsDrawing(false);
+    window.removeEventListener("mousemove", handleGlobalMouseMove);
+    window.removeEventListener("mouseup", handleGlobalMouseUp);
+  };
+
+  const handleMouseLeave = () => {
+    // Do not stop drawing, allow wrap
+  };
 
   // touch handlers (mobile)
   const handleTouchStart = (e) => {
@@ -70,7 +115,17 @@ export default function App() {
   const handleTouchMove = (e) => {
     e.preventDefault();
     if (!isDrawing) return;
-    drawPixelAtEvent(e);
+    // Wrap touch coordinates
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    let x = e.touches[0].clientX - rect.left;
+    let y = e.touches[0].clientY - rect.top;
+    if (x < 0) x = CANVAS_WIDTH + x;
+    if (x >= CANVAS_WIDTH) x = x - CANVAS_WIDTH;
+    if (y < 0) y = CANVAS_HEIGHT + y;
+    if (y >= CANVAS_HEIGHT) y = y - CANVAS_HEIGHT;
+    drawPixelAt(x, y);
   };
 
   const handleTouchEnd = (e) => {
