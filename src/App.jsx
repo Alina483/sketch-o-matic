@@ -168,8 +168,12 @@ export default function App() {
             onTouchEnd={handleTouchEnd}
           />
         </div>
-
         <div className="controls">
+          <div className="side-buttons">
+            <button className="btn btn-small" title="Small 1" />
+            <button className="btn btn-small" title="Small 2" />
+            <button className="btn btn-small" title="Small 3" />
+          </div>
           <button className="btn btn-secondary" onClick={handleResetClick}>
             Reset
           </button>
