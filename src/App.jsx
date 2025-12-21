@@ -5,11 +5,12 @@ const CANVAS_WIDTH = 380;
 const CANVAS_HEIGHT = 320;
 const PIXEL_SIZE = 8;           // size of each “pixel” square
 const BG_COLOR = "#d9d9d9";
-const PEN_COLOR = "#222222";
+
 
 export default function App() {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [brushColor, setBrushColor] = useState("#222222");
   // Removed lastPos state (not needed for wrap logic)
   // Mouse up handler for global event
   const handleGlobalMouseUp = () => {
@@ -40,7 +41,7 @@ export default function App() {
     // Wrap coordinates
     let px = ((Math.floor(x / PIXEL_SIZE) * PIXEL_SIZE) + CANVAS_WIDTH) % CANVAS_WIDTH;
     let py = ((Math.floor(y / PIXEL_SIZE) * PIXEL_SIZE) + CANVAS_HEIGHT) % CANVAS_HEIGHT;
-    ctx.fillStyle = PEN_COLOR;
+    ctx.fillStyle = brushColor;
     ctx.fillRect(px, py, PIXEL_SIZE, PIXEL_SIZE);
   };
 
@@ -170,16 +171,27 @@ export default function App() {
         </div>
         <div className="controls">
           <div className="side-buttons">
-            <button className="btn btn-small" title="Small 1" />
+            <label className="btn btn-small" title="Change Brush Color" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>Color</span>
+              <input
+                type="color"
+                value={brushColor}
+                onChange={e => setBrushColor(e.target.value)}
+                style={{ width: 24, height: 24, border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+                aria-label="Pick brush color"
+              />
+            </label>
             <button className="btn btn-small" title="Small 2" />
             <button className="btn btn-small" title="Small 3" />
           </div>
+          <div className="btn-main-group">
           <button className="btn btn-secondary" onClick={handleResetClick}>
             Reset
           </button>
           <button className="btn btn-primary" onClick={handleSaveClick}>
             Save
           </button>
+          </div>
         </div>
       </div>
     </div>
