@@ -172,7 +172,7 @@ export default function App() {
         <div className="controls">
           <div className="side-buttons">
             <label className="btn btn-small" title="Change Brush Color" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span>Color</span>
+              <span>
               <input
                 type="color"
                 value={brushColor}
@@ -180,6 +180,7 @@ export default function App() {
                 style={{ width: 24, height: 24, border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
                 aria-label="Pick brush color"
               />
+              </span>
             </label>
             <button className="btn btn-small" title="Small 2" />
             <button className="btn btn-small" title="Small 3" />
