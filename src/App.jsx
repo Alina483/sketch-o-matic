@@ -171,19 +171,20 @@ export default function App() {
         </div>
         <div className="controls">
           <div className="side-buttons">
-            <label className="btn btn-small" title="Change Brush Color" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span>
-              <input
-                type="color"
-                value={brushColor}
-                onChange={e => setBrushColor(e.target.value)}
-                style={{ width: 24, height: 24, border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
-                aria-label="Pick brush color"
-              />
+            <label className="btn btn-small" title="Change Brush Color" >
+              <span className="color-btn-swatch">
+                <span className="color-btn-swatch-inner" style={{ background: brushColor }} />
+                <input
+                  type="color"
+                  value={brushColor}
+                  onChange={e => setBrushColor(e.target.value)}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer', margin: 0, padding: 0, border: 'none' }}
+                  aria-label="Pick brush color"
+                />
               </span>
             </label>
-            <button className="btn btn-small" title="Small 2" />
-            <button className="btn btn-small" title="Small 3" />
+            <button className="btn btn-small" title="Small 2" >Text</button>
+            <button className="btn btn-small" title="Small 3" >Text</button>
           </div>
           <div className="btn-main-group">
           <button className="btn btn-secondary" onClick={handleResetClick}>
