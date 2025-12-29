@@ -3,7 +3,7 @@ import "./App.css";
 
 const CANVAS_WIDTH = 380;
 const CANVAS_HEIGHT = 320;
-const PIXEL_SIZE = 8;           // size of each “pixel” square
+const PIXEL_SIZE = 18;           // size of each “pixel” square
 const BG_COLOR = "#d9d9d9";
 
 
@@ -183,7 +183,13 @@ export default function App() {
                 />
               </span>
             </label>
-            <button className="btn btn-small" title="Small 2" >Text</button>
+            <button
+              className="btn btn-small"
+              title="Eraser"
+              onClick={() => setBrushColor(BG_COLOR)}
+            >
+              Eraser
+            </button>
             <button className="btn btn-small" title="Small 3" >Text</button>
           </div>
           <div className="btn-main-group">
