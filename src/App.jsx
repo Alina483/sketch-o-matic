@@ -19,7 +19,7 @@ export default function App() {
     window.removeEventListener("mouseup", handleGlobalMouseUp);
   };
 
-  // helper: fill background
+  // helper fill background
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
