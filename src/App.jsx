@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import eraserIcon from "./assets/eraser.svg";
 import "./App.css";
 
 const CANVAS_WIDTH = 380;
@@ -188,7 +189,7 @@ export default function App() {
               title="Eraser"
               onClick={() => setBrushColor(BG_COLOR)}
             >
-              Eraser
+              <img src={eraserIcon} alt="Eraser" style={{ width: 32, height: 32, verticalAlign: 'middle' }} />
             </button>
             <button className="btn btn-small" title="Small 3" >Text</button>
           </div>
